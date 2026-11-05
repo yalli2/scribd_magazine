@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>세계 잡지 검색 허브</title>
+<style>
+:root{--bg:#f6f7fb;--card:#fff;--ink:#1c2230;--mute:#6b7388;--accent:#c2410c;--accent2:#2f5bea;--line:#e3e6ef;--chip:#eef0f6;--star:#e0a100}
+@media (prefers-color-scheme:dark){:root{--bg:#12151d;--card:#1b2030;--ink:#e8ebf4;--mute:#97a0b5;--accent:#fb8a4c;--accent2:#7b9cff;--line:#2a3045;--chip:#232a3d;--star:#f5c542}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Noto Sans KR","Malgun Gothic",sans-serif}
+.wrap{max-width:1100px;margin:auto;padding:0 16px}
+header{padding:28px 0 6px}
+h1{margin:0 0 6px;font-size:1.5rem}
+p.sub{margin:0;color:var(--mute);font-size:.92rem;line-height:1.55}
+.bar{margin:16px 0 8px;display:flex;gap:8px;flex-wrap:wrap}
+input,select{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-size:.95rem}
+#q{flex:1;min-width:220px}
+.toggle{display:flex;align-items:center;gap:6px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);font-size:.9rem;cursor:pointer;user-select:none}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.chip{border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:6px 11px;font-size:.84rem;cursor:pointer}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip b{font-weight:500;opacity:.65;margin-left:3px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:12px 0 8px;color:var(--mute);font-size:.85rem;flex-wrap:wrap}
+.meta button{border:1px solid var(--line);background:var(--card);color:var(--mute);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:.82rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column}
+.card h3{margin:0;font-size:1.05rem;line-height:1.3}
+.card h3 .s{color:var(--star);font-size:.9rem;margin-left:4px}
+.card p{margin:4px 0 8px;color:var(--mute);font-size:.84rem;line-height:1.45;flex:1}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+.tags span{font-size:.72rem;padding:2px 7px;border-radius:6px;background:var(--chip);color:var(--mute)}
+.btns a{display:inline-block;margin:0 5px 5px 0;padding:6px 10px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;font-size:.8rem}
+.btns a.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.btns a.ev{background:transparent;color:var(--accent2);border:1px solid var(--accent2)}
+.free{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:14px;margin-bottom:20px}
+.free h2{margin:0 0 8px;font-size:1rem}
+.free .row{display:flex;gap:8px;flex-wrap:wrap}
+.free input{flex:1;min-width:200px}
+.free a{padding:10px 14px;border-radius:10px;background:var(--accent);color:#fff;text-decoration:none;font-size:.9rem}
+.free a.ev{background:var(--accent2)}
+.empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:30px 0}
+.note{color:var(--mute);font-size:.8rem;line-height:1.65;padding-bottom:40px}
+label.lbl{font-size:.78rem;color:var(--mute);margin:10px 0 0;display:block}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>📰 세계 잡지 검색 허브</h1>
+  <p class="sub">분야 · 언어 · 나라 · 발행주기로 잡지를 고르고, 버튼을 누르면 Scribd(사용자 업로드 잡지 PDF)나 Everand(Scribd의 공식 잡지 서비스) 검색 결과가 새 탭에서 열립니다. 같은 Scribd 계정으로 두 곳 모두 로그인됩니다.</p>
+</header>
+
+<div class="bar">
+  <input id="q" placeholder="잡지명 · 설명 검색 (예: Vogue, 과학, 스페인어)" autocomplete="off">
+  <select id="lang"><option value="">🌐 모든 언어</option></select>
+  <select id="country"><option value="">🗺️ 모든 나라</option></select>
+  <select id="freq"><option value="">🗓️ 모든 발행주기</option></select>
+  <select id="suffix" title="검색어에 덧붙일 말">
+    <option value="">덧붙임 없음</option>
+    <option value="2026">+ 2026 (최신호)</option>
+    <option value="2025">+ 2025</option>
+    <option value="magazine pdf">+ magazine pdf</option>
+    <option value="special issue">+ special issue</option>
+  </select>
+  <label class="toggle"><input type="checkbox" id="star" style="margin:0"> ★ 세계 주요잡지만</label>
+</div>
+
+<label class="lbl">분야</label>
+<div class="chips" id="cats"></div>
+
+<div class="meta">
+  <span id="count"></span>
+  <span>
+    <button id="sort">정렬: 이름순</button>
+    <button id="reset">필터 초기화</button>
+  </span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="free">
+  <h2>🔎 목록에 없는 잡지 직접 검색</h2>
+  <div class="row">
+    <input id="fq" placeholder="잡지명이나 주제 입력 (예: Jot Down, Revista Arcadia)">
+    <a id="fs" href="#" target="_blank" rel="noopener">Scribd에서</a>
+    <a id="fe" class="ev" href="#" target="_blank" rel="noopener">Everand에서</a>
+  </div>
+</div>
+
+<div class="note">
+  · ★ 표시는 나라와 분야를 대표하는 세계적 잡지입니다. 발행주기는 대표 판(版) 기준이며, 잡지사 사정에 따라 바뀔 수 있습니다.<br>
+  · Everand에는 출판사와 계약된 공식 디지털판이 있고, 나라·구독 플랜에 따라 보이는 잡지가 다릅니다. Scribd 문서 검색에는 이용자가 올린 자료가 섞여 있으니 출처를 확인하세요.<br>
+  · 이 페이지는 파일을 보관하거나 대신 내려받지 않고 검색 링크만 만들어 줍니다. 자료는 이용약관과 저작권 범위 안에서 개인 학습용으로 사용하고, 재배포는 피하세요.
+</div>
+</div>
+
+<script>
+const CATS={
+ news:"📰 시사·뉴스", biz:"💼 경제·비즈니스", sci:"🔬 과학·자연", tech:"💻 IT·테크·게임",
+ cult:"🎨 문학·예술", ent:"🎬 영화·음악·연예", fash:"👗 패션·뷰티", life:"🏡 라이프·인테리어·디자인",
+ food:"🍳 요리·와인", trav:"✈️ 여행", sport:"⚽ 스포츠·건강", car:"🚗 자동차·항공",
+ hist:"🏛️ 역사·철학", lang:"🗣️ 어학·교육", kids:"🧒 어린이·청소년", hobby:"🎸 취미·교양"
+};
+const FREQ={D:"일간",W:"주간",BW:"격주",M:"월간",BM:"격월",Q:"계간"};
+const FORDER=["W","BW","M","BM","Q"];
+// [잡지명, 한글 설명, 분야, 언어, 나라, 발행주기, ★주요]
+const M=[
+// 시사·뉴스
+["TIME","미국을 대표하는 시사 주간지, 올해의 인물로 유명","news","영어","미국","BW",1],
+["Newsweek","미국 시사 주간지, 국제 정치·사회 이슈","news","영어","미국","W",1],
+["The Economist","세계 경제·정치를 다루는 영국 주간지","news","영어","영국","W",1],
+["The Atlantic","미국 장문 저널리즘·사상 월간지","news","영어","미국","M",1],
+["The New Yorker","르포·소설·만평으로 유명한 미국 주간지","news","영어","미국","W",1],
+["The Week","한 주 세계 뉴스 요약 주간지","news","영어","영국","W",0],
+["New Statesman","영국 정치·문화 주간지 (중도좌파)","news","영어","영국","W",0],
+["The Spectator","영국 정치·문화 주간지 (보수)","news","영어","영국","W",0],
+["Foreign Affairs","미국 외교협회(CFR)의 국제관계 전문지","news","영어","미국","BM",1],
+["Foreign Policy","국제정치·외교 분석 잡지","news","영어","미국","Q",0],
+["Private Eye","영국 풍자·탐사보도 잡지","news","영어","영국","BW",0],
+["India Today","인도 대표 시사 주간지","news","영어","인도","W",0],
+["Der Spiegel","독일 대표 시사 주간지, 탐사보도","news","독일어","독일","W",1],
+["Die Zeit","독일 고급 주간 신문·잡지","news","독일어","독일","W",1],
+["Stern","독일 사진 중심 시사 주간지","news","독일어","독일","W",0],
+["Focus","독일 시사 주간지","news","독일어","독일","W",0],
+["Le Point","프랑스 시사 주간지","news","프랑스어","프랑스","W",1],
+["L'Express","프랑스 시사 주간지","news","프랑스어","프랑스","W",0],
+["Le Nouvel Obs","프랑스 시사 주간지 (중도좌파)","news","프랑스어","프랑스","W",0],
+["Courrier International","세계 언론 기사를 번역·소개하는 주간지","news","프랑스어","프랑스","W",0],
+["Paris Match","프랑스 사진 시사 주간지","news","프랑스어","프랑스","W",0],
+["Le Monde diplomatique","국제정치·사회 분석 월간지","news","프랑스어","프랑스","M",1],
+["L'Espresso","이탈리아 시사 주간지","news","이탈리아어","이탈리아","W",0],
+["Internazionale","세계 언론 번역 시사 주간지","news","이탈리아어","이탈리아","W",0],
+["Panorama","이탈리아 시사 주간지","news","이탈리아어","이탈리아","W",0],
+["Revista Semana","콜롬비아 대표 시사지","news","스페인어","콜롬비아","W",1],
+["Proceso","멕시코 탐사보도 시사 주간지","news","스페인어","멕시코","W",1],
+["Caretas","페루 시사 주간지","news","스페인어","페루","W",0],
+["El Jueves","스페인 풍자 만화 주간지","news","스페인어","스페인","W",0],
+["Veja","브라질 최대 시사 주간지","news","포르투갈어","브라질","W",1],
+["Visão","포르투갈 시사 주간지","news","포르투갈어","포르투갈","W",0],
+["週刊文春","슈칸분슌, 일본 특종 보도 주간지","news","일본어","일본","W",1],
+["AERA","아에라, 아사히신문 계열 시사 주간지","news","일본어","일본","W",0],
+["三联生活周刊","싼롄 생활주간, 중국 시사·문화 주간지","news","중국어","중국","W",0],
+["天下雜誌","톈샤 잡지, 대만 경제·시사지","news","중국어","대만","BW",0],
+["시사IN","한국 시사 주간지","news","한국어","한국","W",0],
+["주간동아","한국 시사 주간지","news","한국어","한국","W",0],
+// 경제·비즈니스
+["Bloomberg Businessweek","블룸버그의 비즈니스 잡지","biz","영어","미국","M",1],
+["Forbes","부자 순위로 유명한 경제지","biz","영어","미국","BM",1],
+["Fortune","Fortune 500으로 유명한 경제지","biz","영어","미국","BM",1],
+["Harvard Business Review","하버드 경영 전문지","biz","영어","미국","BM",1],
+["MIT Sloan Management Review","MIT 경영대학원 경영 전문지","biz","영어","미국","Q",0],
+["Entrepreneur","창업·스타트업 잡지","biz","영어","미국","BM",0],
+["Inc.","중소기업·창업 잡지","biz","영어","미국","Q",0],
+["Fast Company","혁신·디자인·리더십 비즈니스지","biz","영어","미국","Q",0],
+["Barron's","미국 금융·투자 주간지","biz","영어","미국","W",0],
+["Kiplinger's Personal Finance","개인 재테크 월간지","biz","영어","미국","M",0],
+["Monocle","글로벌 비즈니스·문화·도시 월간지","biz","영어","영국","M",1],
+["WirtschaftsWoche","독일 경제 주간지","biz","독일어","독일","W",0],
+["Capital","독일 경제 월간지","biz","독일어","독일","M",0],
+["Challenges","프랑스 경제 주간지","biz","프랑스어","프랑스","W",0],
+["Expansión","스페인어권 경제·비즈니스지","biz","스페인어","멕시코","M",0],
+["Exame","브라질 대표 경제지","biz","포르투갈어","브라질","M",0],
+["日経ビジネス","닛케이 비즈니스, 일본 경제 주간지","biz","일본어","일본","W",1],
+["週刊東洋経済","슈칸 도요케이자이, 일본 경제 주간지","biz","일본어","일본","W",0],
+["週刊ダイヤモンド","슈칸 다이아몬드, 일본 경제 주간지","biz","일본어","일본","W",0],
+["财新周刊","차이신 주간, 중국 경제 탐사 주간지","biz","중국어","중국","W",0],
+["이코노미스트","한국 경제 주간지","biz","한국어","한국","W",0],
+["포브스코리아","Forbes 한국판","biz","한국어","한국","M",0],
+// 과학·자연
+["National Geographic","자연·탐험·문화 사진 잡지의 대명사","sci","영어","미국","M",1],
+["Scientific American","미국 대중 과학지","sci","영어","미국","M",1],
+["New Scientist","영국 과학 뉴스 주간지","sci","영어","영국","W",1],
+["Nature","세계 최고 권위의 과학 학술지","sci","영어","영국","W",1],
+["Science","미국과학진흥협회(AAAS) 학술지","sci","영어","미국","W",1],
+["Popular Mechanics","과학·기술·DIY 대중지","sci","영어","미국","BM",0],
+["Discover","미국 대중 과학지","sci","영어","미국","BM",0],
+["Smithsonian","스미스소니언 협회의 역사·과학·문화지","sci","영어","미국","M",0],
+["BBC Science Focus","BBC 대중 과학 월간지","sci","영어","영국","M",0],
+["BBC Wildlife","BBC 야생동물·자연 월간지","sci","영어","영국","M",0],
+["Sky & Telescope","천문 관측 전문지","sci","영어","미국","M",0],
+["Astronomy","천문 대중지","sci","영어","미국","M",0],
+["Psychology Today","심리학 대중지","sci","영어","미국","BM",0],
+["Muy Interesante","스페인 대중 과학 월간지","sci","스페인어","스페인","M",1],
+["National Geographic España","내셔널 지오그래픽 스페인어판","sci","스페인어","스페인","M",0],
+["Science & Vie","프랑스 대중 과학 월간지","sci","프랑스어","프랑스","M",0],
+["Pour la Science","Scientific American 프랑스어판","sci","프랑스어","프랑스","M",0],
+["Spektrum der Wissenschaft","Scientific American 독일어판","sci","독일어","독일","M",0],
+["P.M. Magazin","독일 대중 과학지","sci","독일어","독일","M",0],
+["GEO","독일 자연·르포 사진 월간지","sci","독일어","독일","M",1],
+["Focus Italia","이탈리아 대중 과학 월간지","sci","이탈리아어","이탈리아","M",0],
+["Superinteressante","브라질 대중 과학 월간지","sci","포르투갈어","브라질","M",0],
+["Newton","뉴턴, 일본 그래픽 과학 월간지","sci","일본어","일본","M",0],
+["Вокруг света","보크루크 스베타, 러시아 지리·탐험 월간지","sci","러시아어","러시아","M",0],
+["과학동아","한국 대중 과학 월간지","sci","한국어","한국","M",0],
+// IT·테크·게임
+["WIRED","기술·문화 트렌드 잡지","tech","영어","미국","M",1],
+["MIT Technology Review","MIT 기술 전망지","tech","영어","미국","BM",1],
+["T3","가젯·테크 리뷰 월간지","tech","영어","영국","M",0],
+["Stuff","가젯·테크 월간지","tech","영어","영국","M",0],
+["Maximum PC","PC 하드웨어 잡지","tech","영어","미국","M",0],
+["Macworld","애플 제품 전문지","tech","영어","미국","M",0],
+["The MagPi","라즈베리 파이 공식 잡지","tech","영어","영국","M",0],
+["Linux Format","리눅스 전문지","tech","영어","영국","M",0],
+["Edge","게임 산업·비평 월간지","tech","영어","영국","M",1],
+["PC Gamer","PC 게임 월간지","tech","영어","영국","M",0],
+["Retro Gamer","레트로 게임 월간지","tech","영어","영국","M",0],
+["c't","독일 컴퓨터 기술 전문지","tech","독일어","독일","BW",1],
+["CHIP","독일 IT 월간지","tech","독일어","독일","M",0],
+// 문학·예술
+["The New York Review of Books","미국 서평·지성지","cult","영어","미국","BW",1],
+["The Times Literary Supplement","영국 문학 서평 주간지","cult","영어","영국","W",1],
+["London Review of Books","영국 서평·에세이지","cult","영어","영국","BW",0],
+["The Paris Review","작가 인터뷰로 유명한 문예지","cult","영어","미국","Q",1],
+["Granta","영국 문예 계간지","cult","영어","영국","Q",0],
+["Poetry","미국 시 전문 월간지","cult","영어","미국","M",0],
+["Artforum","현대미술 비평지","cult","영어","미국","M",1],
+["Apollo","미술·컬렉션 월간지","cult","영어","영국","M",0],
+["Beaux Arts Magazine","프랑스 미술 월간지","cult","프랑스어","프랑스","M",0],
+["Lire","프랑스 문학·책 잡지","cult","프랑스어","프랑스","M",0],
+["Télérama","프랑스 문화·방송 주간지","cult","프랑스어","프랑스","W",0],
+["Letras Libres","스페인어권 문학·사상 월간지","cult","스페인어","멕시코","M",1],
+["Revista Ñ","아르헨티나 문화 주간지 (클라린)","cult","스페인어","아르헨티나","W",0],
+["Gatopardo","멕시코 내러티브 저널리즘 잡지","cult","스페인어","멕시코","BM",0],
+["Piauí","브라질 문화·르포 월간지","cult","포르투갈어","브라질","M",0],
+["Domus","이탈리아 건축·디자인 월간지","cult","이탈리아어","이탈리아","M",1],
+["读者","두저(독자), 중국 최대 교양 잡지","cult","중국어","중국","BW",0],
+// 영화·음악·연예
+["Rolling Stone","음악·대중문화 잡지","ent","영어","미국","M",1],
+["Billboard","음악 차트·산업 잡지","ent","영어","미국","W",1],
+["Variety","할리우드 연예 산업 주간지","ent","영어","미국","W",1],
+["The Hollywood Reporter","할리우드 연예 산업지","ent","영어","미국","W",0],
+["Entertainment Weekly","미국 연예 잡지","ent","영어","미국","M",0],
+["People","미국 셀러브리티 주간지","ent","영어","미국","W",0],
+["Hello!","영국 셀러브리티 주간지","ent","영어","영국","W",0],
+["Empire","영국 영화 월간지","ent","영어","영국","M",0],
+["Total Film","영국 영화 월간지","ent","영어","영국","M",0],
+["Sight and Sound","영국영화협회(BFI) 영화 비평지","ent","영어","영국","M",0],
+["Mojo","록·팝 음악 월간지","ent","영어","영국","M",0],
+["Uncut","음악·영화 월간지","ent","영어","영국","M",0],
+["Gramophone","클래식 음악 전문지","ent","영어","영국","M",1],
+["BBC Music Magazine","BBC 클래식 음악 월간지","ent","영어","영국","M",0],
+["Cahiers du cinéma","프랑스 영화 비평지","ent","프랑스어","프랑스","M",1],
+["¡Hola!","스페인 셀러브리티 주간지","ent","스페인어","스페인","W",1],
+["Fotogramas","스페인 영화 월간지","ent","스페인어","스페인","M",0],
+// 패션·뷰티
+["Vogue","세계 최고 권위의 패션지","fash","영어","미국","M",1],
+["British Vogue","보그 영국판","fash","영어","영국","M",0],
+["Vogue Paris","보그 프랑스판","fash","프랑스어","프랑스","M",0],
+["Vogue España","보그 스페인판","fash","스페인어","스페인","M",0],
+["Vogue Italia","보그 이탈리아판","fash","이탈리아어","이탈리아","M",0],
+["Harper's Bazaar","패션·문화 잡지","fash","영어","미국","M",1],
+["ELLE","프랑스에서 시작된 세계적 여성지","fash","프랑스어","프랑스","W",1],
+["Marie Claire","여성 패션·사회 이슈 잡지","fash","영어","영국","M",0],
+["Cosmopolitan","여성 라이프스타일 잡지","fash","영어","미국","M",0],
+["Glamour","여성 패션·뷰티 잡지","fash","영어","미국","M",0],
+["Vanity Fair","문화·정치·셀러브리티 월간지","fash","영어","미국","M",1],
+["GQ","남성 패션·문화 잡지","fash","영어","미국","M",1],
+["Esquire","남성 문화·패션 잡지","fash","영어","미국","BM",0],
+["Tatler","영국 상류사회·패션지","fash","영어","영국","M",0],
+["an・an","앙앙, 일본 여성 주간지","fash","일본어","일본","W",0],
+["non-no","논노, 일본 여성 패션 월간지","fash","일본어","일본","M",0],
+["POPEYE","뽀빠이, 일본 남성 패션·시티보이 잡지","fash","일본어","일본","M",0],
+// 라이프·인테리어·디자인
+["Architectural Digest","인테리어·건축 잡지","life","영어","미국","M",1],
+["Dwell","모던 주거·건축 잡지","life","영어","미국","BM",0],
+["Wallpaper*","디자인·건축·라이프스타일 월간지","life","영어","영국","M",1],
+["Kinfolk","슬로 라이프 감성 계간지","life","영어","덴마크","Q",0],
+["Elle Decoration","인테리어 월간지","life","영어","영국","M",0],
+["House & Garden","영국 인테리어·정원 잡지","life","영어","영국","M",0],
+["Better Homes & Gardens","미국 생활·인테리어 잡지","life","영어","미국","M",0],
+["Real Simple","정리·살림 라이프 잡지","life","영어","미국","M",0],
+["Country Living","전원 라이프스타일 잡지","life","영어","영국","M",0],
+["Gardeners' World","BBC 정원 가꾸기 월간지","life","영어","영국","M",0],
+["Casa BRUTUS","카사 브루투스, 일본 건축·디자인지","life","일본어","일본","M",0],
+["BRUTUS","브루투스, 일본 컬처·라이프 잡지","life","일본어","일본","BW",0],
+["Amateur Photographer","영국 사진 주간지","life","영어","영국","W",0],
+["Digital Camera","디지털 사진 월간지","life","영어","영국","M",0],
+["Aperture","사진 예술 계간지","life","영어","미국","Q",0],
+// 요리·와인
+["Bon Appétit","미국 대표 요리 잡지","food","영어","미국","M",1],
+["Food & Wine","요리·와인 잡지","food","영어","미국","M",0],
+["Saveur","세계 음식 문화 잡지","food","영어","미국","Q",0],
+["Cook's Illustrated","레시피 테스트 요리 잡지","food","영어","미국","BM",0],
+["BBC Good Food","영국 최대 요리 잡지","food","영어","영국","M",1],
+["Olive","영국 요리 잡지","food","영어","영국","M",0],
+["Delicious","요리 월간지","food","영어","영국","M",0],
+["Taste of Home","미국 가정 요리 잡지","food","영어","미국","BM",0],
+["Decanter","와인 전문 월간지","food","영어","영국","M",1],
+["Wine Spectator","와인 평가·뉴스지","food","영어","미국","M",0],
+["La Cucina Italiana","이탈리아 대표 요리 잡지","food","이탈리아어","이탈리아","M",1],
+["Elle à Table","프랑스 요리 잡지","food","프랑스어","프랑스","BM",0],
+["dancyu","단츄, 일본 미식 월간지","food","일본어","일본","M",0],
+// 여행
+["Condé Nast Traveler","럭셔리 여행 잡지","trav","영어","미국","BM",1],
+["Travel + Leisure","미국 여행 잡지","trav","영어","미국","M",1],
+["National Geographic Traveller","내셔널 지오그래픽 여행지 (영국판)","trav","영어","영국","M",0],
+["Wanderlust","배낭·모험 여행 잡지","trav","영어","영국","BM",0],
+["Afar","체험 여행 잡지","trav","영어","미국","Q",0],
+["Viajar","스페인 여행 월간지","trav","스페인어","스페인","M",0],
+["Condé Nast Traveler España","콩데 나스트 트래블러 스페인판","trav","스페인어","스페인","M",0],
+["GEO France","프랑스 자연·여행 월간지","trav","프랑스어","프랑스","M",0],
+["Merian","독일 여행 잡지","trav","독일어","독일","M",0],
+// 스포츠·건강
+["Sports Illustrated","미국 대표 스포츠 잡지","sport","영어","미국","M",1],
+["FourFourTwo","축구 월간지","sport","영어","영국","M",0],
+["World Soccer","세계 축구 월간지","sport","영어","영국","M",0],
+["Kicker","독일 축구 전문지","sport","독일어","독일","W",1],
+["France Football","발롱도르를 만든 프랑스 축구지","sport","프랑스어","프랑스","M",1],
+["Sports Graphic Number","넘버, 일본 스포츠 그래픽지","sport","일본어","일본","BW",0],
+["Runner's World","러닝 전문지","sport","영어","미국","BM",0],
+["Cycling Weekly","사이클 주간지","sport","영어","영국","W",0],
+["Golf Digest","골프 월간지","sport","영어","미국","M",0],
+["Outside","아웃도어·모험 잡지","sport","영어","미국","BM",0],
+["Men's Health","남성 건강·운동 잡지","sport","영어","미국","M",0],
+["Women's Health","여성 건강·운동 잡지","sport","영어","미국","M",0],
+["Yoga Journal","요가 전문지","sport","영어","미국","BM",0],
+["Prevention","건강 생활 잡지","sport","영어","미국","M",0],
+// 자동차·항공
+["Car and Driver","미국 자동차 잡지","car","영어","미국","M",1],
+["MotorTrend","미국 자동차 잡지","car","영어","미국","M",0],
+["Top Gear","BBC 자동차 월간지","car","영어","영국","M",1],
+["Autocar","영국 자동차 주간지","car","영어","영국","W",0],
+["Auto Express","영국 자동차 주간지","car","영어","영국","W",0],
+["evo","스포츠카 전문지","car","영어","영국","M",0],
+["Road & Track","미국 자동차 잡지","car","영어","미국","BM",0],
+["auto motor und sport","독일 대표 자동차지","car","독일어","독일","BW",1],
+["Auto Bild","독일 자동차 주간지","car","독일어","독일","W",0],
+["Quattroruote","이탈리아 자동차 월간지","car","이탈리아어","이탈리아","M",0],
+["Flying","항공·조종 잡지","car","영어","미국","M",0],
+["AirForces Monthly","군용 항공 월간지","car","영어","영국","M",0],
+// 역사·철학
+["BBC History Magazine","BBC 역사 월간지","hist","영어","영국","M",1],
+["History Today","영국 역사 월간지","hist","영어","영국","M",0],
+["National Geographic History","내셔널 지오그래픽 역사지","hist","영어","미국","BM",0],
+["Philosophy Now","대중 철학지","hist","영어","영국","BM",0],
+["Historia National Geographic","내셔널 지오그래픽 역사 스페인어판","hist","스페인어","스페인","M",0],
+["Historia","프랑스 역사 월간지","hist","프랑스어","프랑스","M",0],
+["Philosophie Magazine","프랑스 대중 철학 월간지","hist","프랑스어","프랑스","M",0],
+// 어학·교육
+["Ecos de España y Latinoamérica","스페인어 학습자용 월간지 (독일 발행)","lang","스페인어","독일","M",1],
+["Punto y Coma","스페인어 학습자용 잡지 (오디오 포함)","lang","스페인어","스페인","BM",0],
+["Vocable Espagnol","프랑스 학습자용 스페인어 기사 모음","lang","스페인어","프랑스","BW",0],
+["Vocable Anglais","프랑스 학습자용 영어 기사 모음","lang","영어","프랑스","BW",0],
+["Spotlight","영어 학습자용 월간지 (독일 발행)","lang","영어","독일","M",1],
+["Business Spotlight","비즈니스 영어 학습지","lang","영어","독일","BM",0],
+["Speak Up","영어 학습자용 월간지 (이탈리아 발행)","lang","영어","이탈리아","M",0],
+["Écoute","프랑스어 학습자용 월간지","lang","프랑스어","독일","M",0],
+["Adesso","이탈리아어 학습자용 월간지","lang","이탈리아어","독일","M",0],
+["Deutsch perfekt","독일어 학습자용 월간지","lang","독일어","독일","M",1],
+["English Teaching Professional","영어 교사용 전문지","lang","영어","영국","BM",0],
+["Tes","영국 교육 주간지","lang","영어","영국","W",0],
+["The Japan Times Alpha","영어 학습자용 영자 주간지","lang","영어","일본","W",0],
+["Hiragana Times","일본어·영어 이중언어 잡지","lang","일본어","일본","M",0],
+// 어린이·청소년
+["National Geographic Kids","어린이 자연·과학 잡지","kids","영어","미국","M",1],
+["Highlights for Children","미국 대표 어린이 잡지","kids","영어","미국","M",0],
+["TIME for Kids","어린이 시사 잡지","kids","영어","미국","W",0],
+["Okapi","프랑스 청소년 잡지","kids","프랑스어","프랑스","BW",0],
+["GEOlino","독일 어린이 지식 잡지","kids","독일어","독일","M",0],
+["Muy Interesante Junior","스페인 어린이 과학 잡지","kids","스페인어","스페인","M",0],
+["어린이과학동아","한국 어린이 과학 잡지","kids","한국어","한국","BW",0],
+// 취미·교양
+["Reader's Digest","세계적 교양 요약 월간지","hobby","영어","미국","M",1],
+["Selecciones","리더스 다이제스트 스페인어판","hobby","스페인어","멕시코","M",0],
+["Country Life","영국 전원·건축·교양 주간지","hobby","영어","영국","W",0],
+["Guitar World","기타 연주 월간지","hobby","영어","미국","M",0],
+["Guitar Player","기타 연주 월간지","hobby","영어","미국","M",0],
+["Chess Life","미국 체스 연맹 월간지","hobby","영어","미국","M",0],
+["New In Chess","세계 체스 전문지","hobby","영어","네덜란드","BM",0],
+["Model Railroader","철도 모형 월간지","hobby","영어","미국","M",0],
+["Fine Woodworking","목공 전문지","hobby","영어","미국","BM",0]
+];
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SC=t=>"https://www.scribd.com/search?query="+encodeURIComponent(t);
+const EV=t=>"https://www.everand.com/search?query="+encodeURIComponent(t);
+let cat="", byCat=false;
+
+// 드롭다운 채우기
+const uniq=i=>[...new Set(M.map(x=>x[i]))];
+const fill=(sel,vals)=>vals.forEach(v=>sel.insertAdjacentHTML("beforeend",`<option>${esc(v)}</option>`));
+const cnt=(i,v)=>M.filter(x=>x[i]===v).length;
+fill($("lang"),uniq(3).sort((a,b)=>cnt(3,b)-cnt(3,a)));
+fill($("country"),uniq(4).sort((a,b)=>cnt(4,b)-cnt(4,a)));
+FORDER.forEach(f=>$("freq").insertAdjacentHTML("beforeend",`<option value="${f}">${FREQ[f]}</option>`));
+
+function chips(list){
+  const c={};list.forEach(x=>c[x[2]]=(c[x[2]]||0)+1);
+  $("cats").innerHTML=`<button class="chip ${cat?"":"on"}" data-c="">전체<b>${list.length}</b></button>`+
+   Object.keys(CATS).map(k=>`<button class="chip ${cat===k?"on":""}" data-c="${k}">${CATS[k]}<b>${c[k]||0}</b></button>`).join("");
+}
+function render(){
+  const k=$("q").value.trim().toLowerCase(), L=$("lang").value, C=$("country").value, F=$("freq").value, S=$("star").checked, suf=$("suffix").value;
+  const base=M.filter(x=>(!k||(x[0]+" "+x[1]+" "+x[3]+" "+x[4]+" "+CATS[x[2]]).toLowerCase().includes(k))&&(!L||x[3]===L)&&(!C||x[4]===C)&&(!F||x[5]===F)&&(!S||x[6]));
+  chips(base);
+  let list=base.filter(x=>!cat||x[2]===cat);
+  list=list.slice().sort(byCat?((a,b)=>Object.keys(CATS).indexOf(a[2])-Object.keys(CATS).indexOf(b[2])||a[0].localeCompare(b[0])):((a,b)=>b[6]-a[6]||a[0].localeCompare(b[0])));
+  $("count").textContent=`${list.length}개 잡지`+(list.filter(x=>x[6]).length?` · ★ ${list.filter(x=>x[6]).length}`:"");
+  $("grid").innerHTML=list.length?list.map(([n,d,c,l,co,f,s])=>{
+    const t=suf?n+" "+suf:n;
+    return `<div class="card"><h3>${esc(n)}${s?'<span class="s">★</span>':""}</h3><p>${esc(d)}</p>
+     <div class="tags"><span>${CATS[c]}</span><span>${esc(l)}</span><span>${esc(co)}</span><span>${FREQ[f]}</span></div>
+     <div class="btns">
+      <a href="${SC(t)}" target="_blank" rel="noopener">Scribd 검색</a>
+      <a class="alt" href="${SC(n+" "+new Date().getFullYear())}" target="_blank" rel="noopener">올해 호</a>
+      <a class="ev" href="${EV(n)}" target="_blank" rel="noopener">Everand</a>
+     </div></div>`}).join(""):`<div class="empty">조건에 맞는 잡지가 없어요. 아래 '직접 검색'을 써 보세요.</div>`;
+}
+$("cats").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.c;render();});
+["q","lang","country","freq","suffix","star"].forEach(id=>$(id).addEventListener(id==="q"?"input":"change",render));
+$("sort").onclick=()=>{byCat=!byCat;$("sort").textContent="정렬: "+(byCat?"분야순":"이름순");render();};
+$("reset").onclick=()=>{$("q").value="";["lang","country","freq","suffix"].forEach(i=>$(i).value="");$("star").checked=false;cat="";render();};
+const fu=()=>{const v=$("fq").value.trim()||"magazine";$("fs").href=SC(v);$("fe").href=EV(v);};
+$("fq").addEventListener("input",fu);fu();
+render();
+</script>
+</body>
+</html>
