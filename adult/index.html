@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>성인잡지 검색 (19+)</title>
+<style>
+:root{--bg:#f7f5f6;--card:#fff;--ink:#1f1a1d;--mute:#6f6670;--accent:#9f1239;--accent2:#2f5bea;--line:#e7e1e4;--chip:#f1ecef;--star:#d49b00;--m:#0e7490;--s:#b45309;--h:#9f1239}
+@media (prefers-color-scheme:dark){:root{--bg:#141015;--card:#1e181f;--ink:#efe8ee;--mute:#a297a3;--accent:#f0587e;--accent2:#7b9cff;--line:#33293a;--chip:#2a222c;--star:#f5c542;--m:#22b8cf;--s:#f59f00;--h:#f0587e}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,"Noto Sans KR","Malgun Gothic",sans-serif}
+.wrap{max-width:1100px;margin:auto;padding:0 16px}
+header{padding:24px 0 6px}
+.back{font-size:.85rem;color:var(--mute);text-decoration:none}
+h1{margin:6px 0;font-size:1.5rem}
+p.sub{margin:0;color:var(--mute);font-size:.9rem;line-height:1.55}
+.bar{margin:16px 0 8px;display:flex;gap:8px;flex-wrap:wrap}
+input,select{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font-size:.95rem}
+#q{flex:1;min-width:200px}
+.toggle{display:flex;align-items:center;gap:6px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);font-size:.9rem;cursor:pointer}
+label.lbl{font-size:.78rem;color:var(--mute);margin:10px 0 0;display:block}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 4px}
+.chip{border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:6px 11px;font-size:.84rem;cursor:pointer}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip b{font-weight:500;opacity:.65;margin-left:3px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.8rem;color:var(--mute);margin:10px 0 0}
+.g{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 7px;border-radius:6px;color:#fff}
+.gM{background:var(--m)}.gS{background:var(--s)}.gH{background:var(--h)}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:12px 0 8px;color:var(--mute);font-size:.85rem;flex-wrap:wrap}
+.meta button{border:1px solid var(--line);background:var(--card);color:var(--mute);border-radius:8px;padding:5px 10px;cursor:pointer;font-size:.82rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:24px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column}
+.card h3{margin:0;font-size:1.05rem;line-height:1.3;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.card h3 .s{color:var(--star);font-size:.9rem}
+.card p{margin:6px 0 8px;color:var(--mute);font-size:.84rem;line-height:1.45;flex:1}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+.tags span{font-size:.72rem;padding:2px 7px;border-radius:6px;background:var(--chip);color:var(--mute)}
+.tags span.end{text-decoration:line-through}
+.btns a{display:inline-block;margin:0 5px 5px 0;padding:6px 10px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;font-size:.8rem}
+.btns a.ev{background:transparent;color:var(--accent2);border:1px solid var(--accent2)}
+.btns a.alt{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.free{background:var(--card);border:1px dashed var(--line);border-radius:14px;padding:14px;margin-bottom:20px}
+.free h2{margin:0 0 8px;font-size:1rem}
+.free .row{display:flex;gap:8px;flex-wrap:wrap}
+.free input{flex:1;min-width:200px}
+.free a{padding:10px 14px;border-radius:10px;background:var(--accent);color:#fff;text-decoration:none;font-size:.9rem}
+.free a.ev{background:var(--accent2)}
+.empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:30px 0}
+.note{color:var(--mute);font-size:.8rem;line-height:1.65;padding-bottom:40px}
+#gate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9;padding:16px}
+#gate .box{max-width:420px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;text-align:center}
+#gate h2{margin:0 0 10px}
+#gate p{color:var(--mute);font-size:.9rem;line-height:1.6;margin:0 0 18px}
+#gate button{padding:11px 18px;border-radius:10px;border:0;font-size:.95rem;cursor:pointer;margin:0 4px}
+#gate .yes{background:var(--accent);color:#fff}
+#gate .no{background:var(--chip);color:var(--ink)}
+body.locked .wrap{display:none}
+</style>
+</head>
+<body class="locked">
+<div id="gate"><div class="box">
+  <h2>🔞 성인 전용</h2>
+  <p>이 페이지는 성인잡지 목록입니다.<br>만 19세 이상만 이용할 수 있습니다.</p>
+  <button class="yes" id="ok">19세 이상입니다</button>
+  <button class="no" onclick="location.href='../'">나가기</button>
+</div></div>
+
+<div class="wrap">
+<header>
+  <a class="back" href="../">← 세계 잡지 검색 허브</a>
+  <h1>🔞 세계 성인잡지 검색</h1>
+  <p class="sub">세계 주요 성인잡지를 등급 · 분야 · 나라 · 발행주기 · 발행상태로 고르고, Scribd나 Everand 검색을 새 탭에서 엽니다.</p>
+  <div class="legend">
+    <span><span class="g gM">M</span> 섹시 화보 남성지 (누드 없음·세미누드)</span>
+    <span><span class="g gS">S</span> 소프트코어 누드 성인지</span>
+    <span><span class="g gH">XXX</span> 하드코어</span>
+  </div>
+</header>
+
+<div class="bar">
+  <input id="q" placeholder="잡지명 · 설명 검색 (예: Playboy, 일본)" autocomplete="off">
+  <select id="grade"><option value="">모든 등급</option><option value="M">M · 섹시 화보</option><option value="S">S · 소프트코어</option><option value="H">XXX · 하드코어</option></select>
+  <select id="country"><option value="">🗺️ 모든 나라</option></select>
+  <select id="freq"><option value="">🗓️ 모든 발행주기</option></select>
+  <select id="status"><option value="">모든 발행상태</option><option value="A">발행 중</option><option value="X">폐간·중단</option></select>
+  <label class="toggle"><input type="checkbox" id="star" style="margin:0"> ★ 대표잡지만</label>
+</div>
+
+<label class="lbl">분야</label>
+<div class="chips" id="cats"></div>
+
+<div class="meta">
+  <span id="count"></span>
+  <span><button id="reset">필터 초기화</button></span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="free">
+  <h2>🔎 목록에 없는 잡지 직접 검색</h2>
+  <div class="row">
+    <input id="fq" placeholder="잡지명 입력">
+    <a id="fs" href="#" target="_blank" rel="noopener noreferrer">Scribd에서</a>
+    <a id="fe" class="ev" href="#" target="_blank" rel="noopener noreferrer">Everand에서</a>
+  </div>
+</div>
+
+<div class="note">
+  · Scribd와 Everand는 노골적인 성인물 게시를 금지합니다. 그래서 M·S급은 일부 검색되지만, XXX급은 결과가 거의 없거나 무단 스캔본일 수 있습니다. 이 페이지는 잡지 정보를 정리한 목록에 가깝습니다.<br>
+  · 발행상태와 주기는 바뀌는 일이 잦습니다. 상태를 확실히 알 수 없는 잡지는 '—'로 표시했습니다.<br>
+  · 이 페이지는 검색 링크만 만들고 파일을 보관하거나 내려받지 않습니다. 이용약관과 저작권, 거주국 법령을 지켜 개인 참고용으로만 사용하세요. 검색엔진에 노출되지 않도록 noindex로 설정했습니다.
+</div>
+</div>
+
+<script>
+const CATS={
+ pb:"🐰 플레이보이 계열", lad:"📸 남성 화보지", soft:"💋 누드 성인지",
+ hard:"🔥 하드코어", queer:"🏳️‍🌈 게이·여성 독자", fet:"⛓️ 페티시·예술 누드", trade:"🎞️ 성인 산업·독자투고"
+};
+const FREQ={W:"주간",BW:"격주",M:"월간",BM:"격월",Q:"계간",I:"부정기"};
+const ST={A:"발행 중",X:"폐간·중단","":"—"};
+// [잡지명, 설명, 분야, 등급 M/S/H, 나라, 언어, 발행주기, 상태 A/X/"", ★]
+const D=[
+// 플레이보이 계열
+["Playboy","휴 헤프너가 만든 세계 성인잡지의 원조, 인터뷰·소설로도 유명","pb","S","미국","영어","I","",1],
+["Playboy Deutschland","플레이보이 독일판","pb","S","독일","독일어","M","A",0],
+["Playboy México","플레이보이 멕시코판","pb","S","멕시코","스페인어","M","",0],
+["Playboy Brasil","플레이보이 브라질판","pb","S","브라질","포르투갈어","M","X",0],
+["Playboy Россия","플레이보이 러시아판","pb","S","러시아","러시아어","M","",0],
+["Playboy South Africa","플레이보이 남아공판","pb","S","남아공","영어","M","",0],
+["Playboy Italia","플레이보이 이탈리아판","pb","S","이탈리아","이탈리아어","M","",0],
+["Playboy France","플레이보이 프랑스판","pb","S","프랑스","프랑스어","BM","",0],
+["週刊プレイボーイ","슈칸 플레이보이, 미국판과 무관한 일본 남성 주간지 (그라비아)","pb","M","일본","일본어","W","A",1],
+// 남성 화보지
+["Maxim","세계적 남성 라이프·섹시 화보지","lad","M","미국","영어","BM","A",1],
+["맥심 코리아","Maxim 한국판","lad","M","한국","한국어","M","A",0],
+["FHM","90~2000년대 영국 대표 남성지","lad","M","영국","영어","M","X",1],
+["Loaded","90년대 '래드 매거진' 붐을 일으킨 영국 남성지","lad","M","영국","영어","M","X",0],
+["Nuts","영국 남성 주간지","lad","M","영국","영어","W","X",0],
+["Zoo","영국 남성 주간지","lad","M","영국","영어","W","X",0],
+["Ralph","호주 남성지","lad","M","호주","영어","M","X",0],
+["FLASH","플래시, 일본 사진 주간지 (그라비아)","lad","M","일본","일본어","W","A",0],
+["週刊ポスト","슈칸 포스트, 누드 그라비아가 실리는 일본 주간지","lad","M","일본","일본어","W","A",0],
+["週刊現代","슈칸 겐다이, 그라비아가 실리는 일본 주간지","lad","M","일본","일본어","W","A",0],
+["선데이서울","1968~1991년 한국 대중 연예·화보 주간지","lad","M","한국","한국어","W","X",1],
+["Interviú","시사와 누드 화보를 함께 실은 스페인 주간지","lad","S","스페인","스페인어","W","X",1],
+["Primera Línea","스페인 남성 화보 월간지","lad","S","스페인","스페인어","M","X",0],
+["H para Hombres","멕시코 남성 화보지","lad","M","멕시코","스페인어","M","",0],
+["VIP","브라질 남성 화보지","lad","M","브라질","포르투갈어","M","",0],
+// 누드 성인지
+["Penthouse","플레이보이의 라이벌, 밥 구치오네 창간","soft","S","미국","영어","BM","A",1],
+["Australian Penthouse","펜트하우스 호주판","soft","S","호주","영어","M","",0],
+["Oui","플레이보이가 내던 미국 성인지","soft","S","미국","영어","M","X",0],
+["Gallery","미국 성인 월간지","soft","S","미국","영어","M","",0],
+["Genesis","미국 성인 월간지","soft","S","미국","영어","M","",0],
+["Playgirl","여성 독자를 겨냥한 남성 누드지","soft","S","미국","영어","Q","",1],
+["Mayfair","영국 성인 월간지","soft","S","영국","영어","M","",0],
+["Men Only","영국 성인 월간지","soft","S","영국","영어","M","",0],
+["Knave","영국 성인 월간지","soft","S","영국","영어","M","",0],
+["Fiesta","영국 성인 월간지 (독자 투고)","soft","S","영국","영어","M","",0],
+["Lui","1963년 창간한 프랑스 대표 성인지","soft","S","프랑스","프랑스어","M","",1],
+["Playmen","이탈리아 성인 월간지","soft","S","이탈리아","이탈리아어","M","X",0],
+["Sexy","브라질 성인 월간지","soft","S","브라질","포르투갈어","M","",0],
+["Picture","호주 성인 주간지","soft","S","호주","영어","W","X",0],
+// 하드코어
+["Hustler","래리 플린트가 만든 미국 하드코어 성인지","hard","H","미국","영어","M","A",1],
+["Chic","허슬러 계열 미국 성인지","hard","H","미국","영어","M","X",0],
+["Club","미국 성인 월간지","hard","H","미국","영어","M","",0],
+["Club International","영국 성인 월간지 (폴 레이먼드 계열)","hard","H","영국","영어","M","",0],
+["Cheri","미국 성인 월간지","hard","H","미국","영어","M","",0],
+["High Society","미국 성인 월간지","hard","H","미국","영어","M","",0],
+["Swank","미국 성인 월간지","hard","H","미국","영어","M","",0],
+["Velvet","미국 성인 월간지","hard","H","미국","영어","M","",0],
+["Score","미국 성인 월간지","hard","H","미국","영어","M","",0],
+["Leg Show","다리 페티시 특화 미국 성인지","hard","H","미국","영어","M","",0],
+["Razzle","영국 성인 월간지","hard","H","영국","영어","M","",0],
+["Escort","영국 성인 월간지","hard","H","영국","영어","M","",0],
+["Private","스웨덴에서 창간해 유럽 하드코어 시장을 연 잡지","hard","H","스웨덴","영어","M","",1],
+["Le Ore","이탈리아 하드코어 주간지","hard","H","이탈리아","이탈리아어","W","",0],
+["Union","프랑스 성(性) 생활·에로티시즘 잡지","hard","H","프랑스","프랑스어","M","",0],
+["Hot Vidéo","프랑스 성인영화 잡지","hard","H","프랑스","프랑스어","M","",0],
+["Happy Weekend","독일 스윙어·커플 교류지","hard","H","독일","독일어","BM","",0],
+["ビデオ・ザ・ワールド","비디오 더 월드, 일본 AV 리뷰 월간지","hard","H","일본","일본어","M","",0],
+["S&Mスナイパー","S&M 스나이퍼, 일본 SM 전문지","hard","H","일본","일본어","M","X",0],
+// 게이·여성 독자
+["Honcho","미국 게이 성인지","queer","H","미국","영어","M","",0],
+["Mandate","미국 게이 성인지","queer","H","미국","영어","M","",0],
+["Torso","미국 게이 성인지","queer","H","미국","영어","M","",0],
+["Blueboy","1970년대 창간한 미국 게이 라이프·누드지","queer","S","미국","영어","M","X",0],
+["Jock","미국 게이 성인지","queer","H","미국","영어","M","",0],
+// 페티시·예술 누드
+["Bizarre","존 윌리의 1946~59년 페티시 아트 잡지","fet","S","미국","영어","I","X",1],
+["Skin Two","영국 페티시 패션·문화지","fet","S","영국","영어","I","",1],
+["Marquis","독일 라텍스·페티시 패션지","fet","S","독일","영어","Q","",0],
+["Richardson","미국 섹스·문화 예술 잡지","fet","S","미국","영어","I","",0],
+["Treats!","미국 예술 누드 사진지","fet","S","미국","영어","I","",0],
+["Penthouse Forum","펜트하우스의 독자 체험 투고지","trade","H","미국","영어","M","",0],
+// 산업지
+["AVN","Adult Video News, 미국 성인영화 산업 전문지 (AVN 어워드 주최)","trade","H","미국","영어","M","A",1],
+["XBIZ","성인 산업 비즈니스 전문지","trade","H","미국","영어","M","A",0]
+];
+
+const $=id=>document.getElementById(id);
+// 연령 확인
+try{if(sessionStorage.getItem("adult_ok")==="1")document.body.classList.remove("locked"),$("gate").remove();}catch(e){}
+$("ok")&&($("ok").onclick=()=>{try{sessionStorage.setItem("adult_ok","1")}catch(e){};document.body.classList.remove("locked");$("gate").remove();});
+
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SC=t=>"https://www.scribd.com/search?query="+encodeURIComponent(t);
+const EV=t=>"https://www.everand.com/search?query="+encodeURIComponent(t);
+const GL={M:"M",S:"S",H:"XXX"};
+let cat="";
+const cnt=(i,v)=>D.filter(x=>x[i]===v).length;
+[...new Set(D.map(x=>x[4]))].sort((a,b)=>cnt(4,b)-cnt(4,a)).forEach(v=>$("country").insertAdjacentHTML("beforeend",`<option>${esc(v)}</option>`));
+["W","BW","M","BM","Q","I"].forEach(f=>$("freq").insertAdjacentHTML("beforeend",`<option value="${f}">${FREQ[f]}</option>`));
+
+function render(){
+  const k=$("q").value.trim().toLowerCase(),G=$("grade").value,C=$("country").value,F=$("freq").value,S=$("status").value,star=$("star").checked;
+  const base=D.filter(x=>(!k||(x[0]+" "+x[1]+" "+x[4]+" "+x[5]+" "+CATS[x[2]]).toLowerCase().includes(k))&&(!G||x[3]===G)&&(!C||x[4]===C)&&(!F||x[6]===F)&&(!S||x[7]===S)&&(!star||x[8]));
+  const c={};base.forEach(x=>c[x[2]]=(c[x[2]]||0)+1);
+  $("cats").innerHTML=`<button class="chip ${cat?"":"on"}" data-c="">전체<b>${base.length}</b></button>`+Object.keys(CATS).map(k=>`<button class="chip ${cat===k?"on":""}" data-c="${k}">${CATS[k]}<b>${c[k]||0}</b></button>`).join("");
+  const list=base.filter(x=>!cat||x[2]===cat).sort((a,b)=>b[8]-a[8]||a[0].localeCompare(b[0]));
+  $("count").textContent=`${list.length}개 잡지`;
+  $("grid").innerHTML=list.length?list.map(([n,d,ct,g,co,l,f,st,s])=>`<div class="card">
+    <h3><span class="g g${g}">${GL[g]}</span>${esc(n)}${s?'<span class="s">★</span>':""}</h3><p>${esc(d)}</p>
+    <div class="tags"><span>${CATS[ct]}</span><span>${esc(co)}</span><span>${esc(l)}</span><span>${FREQ[f]}</span><span class="${st==="X"?"end":""}">${ST[st]}</span></div>
+    <div class="btns">
+      <a href="${SC(n+" magazine")}" target="_blank" rel="noopener noreferrer">Scribd 검색</a>
+      <a class="alt" href="${SC(n)}" target="_blank" rel="noopener noreferrer">이름만</a>
+      <a class="ev" href="${EV(n)}" target="_blank" rel="noopener noreferrer">Everand</a>
+    </div></div>`).join(""):`<div class="empty">조건에 맞는 잡지가 없어요.</div>`;
+}
+$("cats").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;cat=b.dataset.c;render();});
+["q","grade","country","freq","status","star"].forEach(id=>$(id).addEventListener(id==="q"?"input":"change",render));
+$("reset").onclick=()=>{$("q").value="";["grade","country","freq","status"].forEach(i=>$(i).value="");$("star").checked=false;cat="";render();};
+const fu=()=>{const v=$("fq").value.trim()||"magazine";$("fs").href=SC(v);$("fe").href=EV(v);};
+$("fq").addEventListener("input",fu);fu();
+render();
+</script>
+</body>
+</html>
